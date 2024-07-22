@@ -1,31 +1,59 @@
 ﻿// See https://aka.ms/new-console-template for more informatio
 
-class MyClass : Exception { 
 
-    public MyClass()
+
+
+
+
+class Program
+{
+    static void Main(string[] args)
     {
-        MyClass myClass = new MyClass();
-        myClass.Data.Add("Дата создания исключения",DateTime.Now);
-        //////////////////////////////////////
-        
-        MyClass myClass2 = new MyClass();
-        string errorMessage = "Произошла непредвиденная ошибка в приложении. Администрация сайта уже бежит на помощь.";
-        
-        
-        errorMessage =  myClass2.Message;
-        myClass2.HelpLink = "Помощь в пути";
-
         try
         {
+            Console.WriteLine("Выберите способ для вызова делегата 1 или 2"); 
+            byte Num = byte.Parse(Console.ReadLine());
+            F1 f1 = F2;
+            switch (Num)
+            {
+                case 1:
+                    int p1 = f1.Invoke(10, 7);
+                    Console.WriteLine("Разность {0}", p1);
+                    
+                    break; 
+                    case 2:
+                    int p2 = f1(100, 30);  
+                    
+                    Console.WriteLine("Разность {0}", p2);
+                   
+                    break;
+                default:
+                    throw new Exception("Выход за диапазон");
+                    break;
 
+            
+            
+            }
+            
+         //   f1.Invoke(10, 7);
+         //  Console.WriteLine("Разность {0}", f1.Invoke(10, 7));
+            Console.ReadKey();
         }
+
         catch (Exception ex)
         {
-            Console.WriteLine(ex.ToString());   
-        }     
-    
+
+            Console.WriteLine(ex.GetType());
+        }
     }
 
+    public delegate int F1(int x, int y);
+
+
+    static int F2(int x, int y)
+    {
+        return x - y;
+    }
 
 }
 
