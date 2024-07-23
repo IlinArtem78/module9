@@ -95,3 +95,75 @@
     {
         return new Random().Next(0, 100);
     }
+    ////////////////////////////////////////////
+
+
+        static void Main(string[] args)
+    {
+
+        CarDelegate carDelegate;
+        carDelegate = BuildBMW; // ковариантность
+        Car c = carDelegate("X6");
+        Console.WriteLine(c.Model);
+        Console.Read();
+
+        ShowMessageDelegate showMessageDelegate = (string _message) =>
+            {
+                Console.WriteLine(_message);
+            };
+            showMessageDelegate.Invoke("Hello World!");
+            Console.Read();
+        
+    }
+
+    delegate Car CarDelegate(string name);
+
+    private static BMW BuildBMW(string model)
+    {
+        return new BMW { Model = model };
+    }
+
+
+
+}
+class Car
+{
+    public string Model { get; set; }
+}
+class BMW : Car { }
+
+///////////////////////////////////////////////////////////////////////////
+class Program
+{
+    
+    static void Main(string[] args)
+    {
+
+        BwmInfo bmwInfo = GetCarInfo; // контравариантность
+        BMW bwm = new BMW
+        {
+            Model = "X6"
+        };
+        bmwInfo(bwm);
+        Console.Read();
+
+    }
+
+    delegate void BwmInfo(BMW bwm);
+
+
+
+
+    private static void GetCarInfo(Car p)
+    {
+        Console.WriteLine(p.Model);
+    }
+
+}
+class Car
+{
+    public string Model { get; set; }
+}
+class BMW : Car {}
+////////////////////////////////////////////////////////////
+
