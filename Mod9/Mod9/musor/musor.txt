@@ -98,65 +98,33 @@
     ////////////////////////////////////////////
 
 
-        static void Main(string[] args)
+  static void Main(string[] args)
     {
-
-        CarDelegate carDelegate;
-        carDelegate = BuildBMW; // ковариантность
-        Car c = carDelegate("X6");
-        Console.WriteLine(c.Model);
-        Console.Read();
-
-        ShowMessageDelegate showMessageDelegate = (string _message) =>
-            {
-                Console.WriteLine(_message);
-            };
-            showMessageDelegate.Invoke("Hello World!");
-            Console.Read();
-        
-    }
-
-    delegate Car CarDelegate(string name);
-
-    private static BMW BuildBMW(string model)
-    {
-        return new BMW { Model = model };
-    }
+        LexusInfo lexus = BuildLexus;
+        Car C = lexus("RX");             //-ковариантность
+        Console.WriteLine(C.Model);
 
 
 
-}
-class Car
-{
-    public string Model { get; set; }
-}
-class BMW : Car { }
 
-///////////////////////////////////////////////////////////////////////////
-class Program
-{
-    
-    static void Main(string[] args)
-    {
+        ParentInform parent = ParentInfo; ///-контравариантности
+        parent.Invoke(new Child());
 
-        BwmInfo bmwInfo = GetCarInfo; // контравариантность
-        BMW bwm = new BMW
-        {
-            Model = "X6"
-        };
-        bmwInfo(bwm);
         Console.Read();
 
     }
 
-    delegate void BwmInfo(BMW bwm);
+    public delegate Lexus LexusInfo(string name); //
 
-
-
-
-    private static void GetCarInfo(Car p)
+    public delegate void ParentInform(Child children); ///
+    private static Lexus BuildLexus(string model) //
     {
-        Console.WriteLine(p.Model);
+        return new Lexus { Model = model };
+    }
+    ///
+    public static void ParentInfo(Parent parent)
+    {
+        Console.WriteLine(parent);
     }
 
 }
@@ -164,6 +132,65 @@ class Car
 {
     public string Model { get; set; }
 }
-class BMW : Car {}
+class Lexus : Car {
+
+  
+
+}
+class Parent { }
+class Child : Parent { }
 ////////////////////////////////////////////////////////////
+
+
+
+
+
+        NumReader numReader = new NumReader();
+        numReader.NumEnterEvent += ShowNumber;
+        try
+        {
+            
+            numReader.Read();
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Введено некорректное значение");
+        }
+    }
+    static void ShowNumber(int num)
+    {
+       switch(num)
+        {
+            case 1: Console.WriteLine("Введено значение 1"); break;
+
+            case 2: Console.WriteLine("Введено значение 2"); break;
+
+        }
+    
+    }
+
+
+
+}
+
+class NumReader
+{
+    public delegate void NumberEnter(int value);    
+
+    public  event NumberEnter NumEnterEvent; 
+
+   public void Read()
+    {
+        Console.WriteLine();
+        Console.WriteLine("Введите значение либо 1, либо 2:");
+        
+        int num = int.Parse(Console.ReadLine());    
+        if (num != 1 && num !=2) { throw new FormatException(); }
+        NumberEntered(num);
+    }
+    protected virtual void NumberEntered(int number)
+    {
+        NumEnterEvent?.Invoke(number);
+    }
+
 
