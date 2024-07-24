@@ -45,10 +45,9 @@ class Program
         {
             case 1:
                 Task1 task1 = new Task1();
-
                 break;
-
                 case 2:
+                Task2 task2 = new Task2();  
                 break;
                 default:
                 Console.WriteLine("Вы ввели неверное значение"); 
